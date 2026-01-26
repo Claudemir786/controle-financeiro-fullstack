@@ -3,6 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Tabs from "./Tabs";
+import Home from "../pages/Home";
+import Profile from "../pages/Profile";
+import AddTransaction from "../pages/AddTransactions";
+import ListTrnasaction from "../pages/ListTransactions";
+import Header from "../components/Header";
 
 
 const STACK = createNativeStackNavigator();
@@ -15,6 +20,12 @@ export default function Stack(){
                 <STACK.Screen name="login" component={Login} />
                 <STACK.Screen name="register" component={Register} />
                 <STACK.Screen name="tabs" component={Tabs} />
+                <STACK.Screen name="home" component={Home}/>
+                <STACK.Screen name="profile" component={Profile}/>
+                <STACK.Screen name="add" component={AddTransaction}/>
+                <STACK.Screen name="list" component={ListTrnasaction}/>
+                <STACK.Screen name="header" component={Header}/>
+
             </STACK.Navigator>
 
         </NavigationContainer>
