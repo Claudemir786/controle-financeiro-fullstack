@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent:'center',
         alignItems:'center',
-        width:"100%",
-        backgroundColor:"black"
+        width:"100%",        
+        marginTop:5,
     },
     input:{
         borderBottomWidth:1,

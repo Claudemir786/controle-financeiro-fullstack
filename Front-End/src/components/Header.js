@@ -18,7 +18,7 @@ export default function Header({name="Olá Usuário", on}){
 
 const styles = StyleSheet.create({
      header:{        
-        backgroundColor:"#006d15",
+        
         marginBottom:15,
         
     },

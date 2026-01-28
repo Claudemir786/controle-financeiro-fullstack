@@ -8,6 +8,8 @@ import Profile from "../pages/Profile";
 import AddTransaction from "../pages/AddTransactions";
 import ListTrnasaction from "../pages/ListTransactions";
 import Header from "../components/Header";
+import ChangePassword from "../pages/ChangePassword";
+import ChangeEmail from "../pages/ChangeEmail";
 
 
 const STACK = createNativeStackNavigator();
@@ -25,6 +27,8 @@ export default function Stack(){
                 <STACK.Screen name="add" component={AddTransaction}/>
                 <STACK.Screen name="list" component={ListTrnasaction}/>
                 <STACK.Screen name="header" component={Header}/>
+                <STACK.Screen name="cPassword" component={ChangePassword}/>
+                <STACK.Screen name="cEmail" component={ChangeEmail}/>
 
             </STACK.Navigator>
 
