@@ -116,7 +116,9 @@ export const CATEGORYEXPENSES=[
       "Igrejas",
       "Ajudas pontuais"
     ]
-  }
+  },
+  
 
+ 
 ]
 

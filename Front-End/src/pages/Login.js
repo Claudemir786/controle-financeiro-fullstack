@@ -1,16 +1,32 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import CommonInput from "../components/CommonInputField.js";
 import { useState } from "react";
+import { UserLogin } from "../services/User.js";
 
 
 export default function Login({navigation}){
-    const[email,setEmail] = useState(" ");
-    const[password, setPassword] = useState(" ");
+    const[email,setEmail] = useState("");
+    const[password, setPassword] = useState("");
 
-    function handleLogin(){
-        console.log("email: ", email);
-        console.log("senha: ", password);
-        navigation.navigate("tabs");
+    async function handleLogin(){
+        if(!email || !password ||  email.length <  8 || password.length < 6)alert("Digite senha e email corretamente");
+        
+        try{
+            const result = await UserLogin(email,password);
+            if(result){
+                navigation.navigate("tabs");
+            }
+            console.log("resultado: ", result);//para possivel debug
+            
+
+        }catch(err){
+            console.log("erro ao buscar dados de login: ", err);
+            alert("não foi possivel realizar o login");
+        }
+       
+        
+        
+        
     }
 
     function handleRegister(){

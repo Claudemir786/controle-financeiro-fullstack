@@ -1,6 +1,7 @@
 import {View,Text,StyleSheet, TouchableOpacity} from "react-native"
 import CommonInput from "../components/CommonInputField.js";
 import { useState } from "react";
+import { UserCreate } from "../services/User.js";
 
 export default function Register({navigation}){
 
@@ -8,9 +9,21 @@ export default function Register({navigation}){
     const[email,setEmail]=useState("");
     const[password,setPassword]=useState("");
 
-    function handleRegister(){     
-        
-        navigation.navigate("login");
+   async function handleRegister(){     
+        if(!name || !password || !email || name.length <= 2 || email.length < 8 || password.length < 6)alert("Digite os campos corretamente");
+
+        try{
+            const result = await UserCreate(name,email,password);
+            if(result){
+                alert("Usuário criado com sucesso");
+                navigation.navigate("login");
+            }
+            //console.log("resultado: ", result);
+        }catch(err){
+            console.error("Erro ao criar usuário novo: ", err);
+            alert("Não foi possivel criar um novo usuário");
+        }       
+            
     }
 
     return(

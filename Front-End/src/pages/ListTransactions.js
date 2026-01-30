@@ -7,7 +7,7 @@ export default function ListTrnasaction({navigation}){
         <View style={styles.container}>
             <Header on={()=>navigation.navigate("profile")}/>
             <View style={styles.body}>
-                <Text style={{color:"#fff", textAlign:'center',fontSize:25}}>Lista de transações</Text>
+                <Text style={{color:"#fff", textAlign:'center',fontSize:25}}>Lista de transações feitas</Text>
                 <ScrollView>
                     <View style={styles.rowTrasation}>
                         <Text style={{color:"#fff", fontSize:20}}>Categoria 1</Text>

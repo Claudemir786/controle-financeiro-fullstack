@@ -6,9 +6,10 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { useState } from "react";
 import { CATEGORYEXPENSES } from "../components/CategoryArray";
 import { Checkbox } from "expo-checkbox";
+import { createTransaction } from "../services/Transations";
 
 export default function AddTransaction({navigation}){
-    const[tipo,setTipo] = useState("");
+    const[type,setType] = useState("");
     const[category,setCategory] = useState("");
     const[subCategory, setSubCategory]=useState("");
     const[date,setDate]= useState(new Date());
@@ -17,7 +18,9 @@ export default function AddTransaction({navigation}){
     const[dateEnd, setDateEnd] = useState(new Date());
     const[frequenc, setFreq] = useState(false);
     const[frequency, setFreqy] = useState(false);
-
+    const[value, setValue]= useState("");
+    const[description,setDescription] = useState("");
+    const[error, setError] = useState(false)
 
     const whenSelecting = (event, dateSelect)=>{
         setShowDate(false)
@@ -32,6 +35,31 @@ export default function AddTransaction({navigation}){
             setDateEnd(dataSelect);
         }
     }
+
+    async function handleCreate(){
+        //console.log(`Dados retornados: ${type} ${value} ${category} ${subCategory} ${description}`);
+        const valueFloat = parseFloat(value);
+        //console.log("valor em numero: ", valueFloat);
+
+        //Verificação de campos
+        if(!type || !value || !date)alert("por favor preencha os dados corretamente");
+        if(type === "Entrada")setCategory("Entrada dinheiro");
+
+        try {
+            const result = await createTransaction(type,valueFloat,category,subCategory,description,frequency,date,dateEnd)
+            if(!result){               
+                setError(true)//usa esse valor para renderizar a mensagem de erro na tela 
+            }else{
+                alert("Transação adicionada com sucesso");
+                navigation.navigate("tabs");
+            }            
+            
+        } catch (err) {
+             console.error("não foi possível criar nova transação: ", err);
+        }
+        
+        
+    }
     
     return(
         <View style={styles.container}>
@@ -42,25 +70,41 @@ export default function AddTransaction({navigation}){
 
                 <ScrollView style={styles.form}>{/*formulário*/}
 
+                    {/*CAMPO DE TIPO */}
                     <Text style={styles.text}>Tipo:</Text>
                     <Picker 
-                    selectedValue={tipo} 
-                    onValueChange={(value)=> setTipo(value)}
+                    selectedValue={type} 
+                    onValueChange={(value)=> setType(value)}
                     style={styles.picker}
-                    >
+                    > 
+                        <Picker.Item label="Selecione" />
                         <Picker.Item label="Entrada" value="Entrada"/>
                         <Picker.Item label="Saída" value="Saída"/>
                     </Picker>
-                    
-                    <CommonInput name="Valor:" />{/*componente pronto */}
 
-                    <Text style={styles.text}>Categoria:</Text>
+                    
+                    {/*CAMPO DE VALOR*/}
+                    <Text style={styles.text}>Valor:</Text>
+                    <TextInput
+                    keyboardType="decimal-pad"
+                    value={value}
+                    style={styles.input}
+                    onChangeText={(text) =>{
+                        const clean =text.replace(/[^0-9.]/g, '');
+                        setValue(clean);
+                    }}
+                    />
+
+                    {/*SOMENTE SE "TIPO" FOR SAÍDA */}
+                    {type === "Saída" && (
+                        <>
+                             <Text style={styles.text}>Categoria:</Text>
                     <Picker 
                     selectedValue={category} 
                     onValueChange={(value)=> setCategory(value)}
                     style={styles.picker}
                     >
-                        <Picker.Item label="Selecione" value=" "/>                        
+                       <Picker.Item label="Selecione"  />                       
                        {CATEGORYEXPENSES.map(c=>(
                         <Picker.Item 
                             key={c.categoria}
@@ -71,13 +115,16 @@ export default function AddTransaction({navigation}){
                         }                        
               
                     </Picker>
+
+                    {/*CAMPO DE SUBCATEGORIA */}
                     <Text style={styles.text}>SubCategoria:</Text>
+                        <Picker.Item label="Selecione"  />
                         <Picker
                          selectedValue={subCategory} 
-                         onValueChange={(value)=> setSubCategory(value)}
+                         onValueChange={(v)=> setSubCategory(v)}
                          style={styles.picker}
                         >
-                            <Picker.Item label="Selecione" value=" "/>
+                            
                             {CATEGORYEXPENSES
                                 .filter(c => c.categoria === category)
                                 .map(c =>
@@ -91,8 +138,15 @@ export default function AddTransaction({navigation}){
                                 )
                            
                             }                    
-                        </Picker>                    
-                    <CommonInput name="Descrição:" />{/*componente pronto */}
+                        </Picker>   
+                        </>
+                             
+                    ) 
+                        
+                    }
+
+                     {/*DESCRIÇÃO */}          
+                    <CommonInput name="Descrição:" value={description} setValue={setDescription}/>{/*componente pronto */}
 
                     <Text style={styles.text}>Frequência mensal:</Text>
                     <View style={{flexDirection:'row', justifyContent:"center"}}>
@@ -101,8 +155,10 @@ export default function AddTransaction({navigation}){
                         <Checkbox value={frequenc} onValueChange={setFreq} style={{padding:10}}/>
                         <Text style={{color:"#fff",marginLeft:10, marginRight:10,fontSize:15}}>Não</Text>                 
                     </View>
+
                   
-                    <Text style={styles.text}>Data Inicio</Text>
+                    {/*DATA */}
+                    <Text style={styles.text}>Data</Text>
                     <TouchableOpacity onPress={()=>setShowDate(true)}>
                         <Text style={styles.text}>{date.toLocaleDateString('pt-br')}</Text>
                     </TouchableOpacity>
@@ -118,11 +174,23 @@ export default function AddTransaction({navigation}){
                             <Text style={styles.text}>{date.toLocaleDateString('pt-br')}</Text>
                           </TouchableOpacity>
                           {showDateEnd &&(
-                            <DateTimePicker value={date} mode="date" display="default" onChange={whenSelectingDataEnd} />
+                            <DateTimePicker value={dateEnd} mode="date" display="default" onChange={whenSelectingDataEnd} />
                           )}
                         </>
                          
-                    )}          
+                    )} 
+                    <TouchableOpacity 
+                    style={styles.button}
+                    onPress={()=> handleCreate()}
+                    >
+                        <Text style={{color:'#fff', fontSize:25, textAlign:'center'}}>Criar</Text>
+                    </TouchableOpacity> 
+                    {error &&(
+                        <Text style={{fontSize: 25, color: 'red', textAlign:'center'}}>
+                    Não foi possível criar transação
+                        </Text>
+            
+                    )}        
                 </ScrollView>  
 
             </View>
@@ -163,6 +231,27 @@ const styles = StyleSheet.create({
         backgroundColor:'#000',   
         borderRadius:8,
         borderColor:"#006d15"     
+    },
+    button:{
+        backgroundColor:"#006d12",
+        width:'50%',
+        alignSelf:'center',
+        marginTop:20,        
+        marginBottom:50,
+        borderRadius:20,
+        padding:15,
+
+    },
+    input:{
+        borderBottomWidth:1,
+        width:'65%',
+        textAlign:'center',
+        padding:10,
+        marginTop:10,  
+        marginBottom:15,   
+        borderBlockColor:"#006d15",
+        color:"#fff",
+        alignSelf:'center',
     }
    
 });

@@ -6,6 +6,8 @@ import { registerRootComponent } from 'expo';
 //import Login from './src/pages/Login';
 //import Register from './src/pages/Register';
 import Stack from './src/routes/Stack';
+import AddTransaction from './src/pages/AddTransactions';
+import ListTrnasaction from './src/pages/ListTransactions';
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
