@@ -9,7 +9,11 @@ const transaction = new  Transaction();
 
 //ROTAS USUÁRIO
 route.post("/api/login", user.login);
+route.post("/api/create", user.create);
+route.post("/api/email", user.alterEmail);
 
 //ROTAS TRANSAÇÕES
 route.get("/api/transations", transaction.get);
+
+
 export default route;
