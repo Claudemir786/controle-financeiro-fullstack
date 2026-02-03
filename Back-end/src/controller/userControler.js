@@ -1,4 +1,4 @@
-import { create, login, modificEmail, modificPassword } from "../DAO/userDao.js";
+import { create, login, modificEmail, modificPassword, nameUser } from "../DAO/userDao.js";
 
 //função criada apenas para responder com erro pois a menssagem estava se repetindo muito
 function messageFalse(res,men){
@@ -19,7 +19,7 @@ export class User{
             if(!userLogin)res.status(401).json({success:false, message:"usuário não encontrado"});
 
 
-            return res.status(200).json({success:true, token:userLogin});
+            return res.status(200).json({success:true, token:userLogin[0], id:userLogin[1]});
 
         } catch (error) {
             console.log("Erro ao fazer o login: ", error);
@@ -46,10 +46,10 @@ export class User{
     async alterEmail(req,res){
         try {
             
-            const{email} = req.body;
-            if(!email)messageFalse(res,"dados enviados incorretamente");
+            const{newEmail,email} = req.body;
+            if(!email || !newEmail)messageFalse(res,"dados enviados incorretamente");
 
-            const userEmail = await modificEmail(email);
+            const userEmail = await modificEmail(email, newEmail);
             if(!userEmail)messageFalse(res,"falha ao modificar email");
 
             return res.status(200).json({success:true, message:"email alterado com sucesso"});
@@ -63,10 +63,10 @@ export class User{
     async alterPassword(req,res){
         try {
             
-            const {password} = req.body;
-            if(!password)messageFalse(res,"dados enviados incorretamente");
+            const {email,password} = req.body;
+            if(!password || !email)messageFalse(res,"dados enviados incorretamente");
             
-            const userPassword = await modificPassword(password);
+            const userPassword = await modificPassword(password,email);
             if(!userPassword)messageFalse(res,"falha ao alterar senha");
 
             return res.status(200).json({success:true, message:"senha alterada com sucesso"});            
@@ -74,6 +74,21 @@ export class User{
         } catch (error) {
             console.log("falha na requisição: ", error);
             return messageFalse(res,"Falha ao alterar senha");
+        }
+    }
+    async nameUser(req,res){
+        try {
+            const{id} = req.body;
+            if(!id)messageFalse(res,"dados enviados incorretamente");
+
+            const name = await nameUser(id);
+            if(!name)messageFalse(req,"falha na busca do nome");
+
+            return res.status(200).json({success:true, name:name});
+
+        } catch (error) {
+            console.log("falha na requisição: ", error);
+            return messageFalse(res,"falha ao buscar nome de usuário");
         }
     }
 }

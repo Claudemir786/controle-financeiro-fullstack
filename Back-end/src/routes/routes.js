@@ -10,7 +10,10 @@ const transaction = new  Transaction();
 //ROTAS USUÁRIO
 route.post("/api/login", user.login);
 route.post("/api/create", user.create);
-route.post("/api/email", user.alterEmail);
+route.put("/api/updateEmail", user.alterEmail);
+route.put("/api/updatePassword", user.alterPassword);
+route.get("/api/user", user.nameUser);
+
 
 //ROTAS TRANSAÇÕES
 route.get("/api/transations", transaction.get);
