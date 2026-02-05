@@ -1,7 +1,7 @@
 import { create, login, modificEmail, modificPassword, nameUser } from "../DAO/userDao.js";
 
 //função criada apenas para responder com erro pois a menssagem estava se repetindo muito
-function messageFalse(res,men){
+export function messageFalse(res,men){
         return res.status(401).json({sucesses:false, message:men});
     }
 

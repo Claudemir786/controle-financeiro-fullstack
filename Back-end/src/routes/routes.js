@@ -16,7 +16,8 @@ route.get("/api/user", user.nameUser);
 
 
 //ROTAS TRANSAÇÕES
-route.get("/api/transations", transaction.get);
+route.get("/api/info", transaction.info);
+route.post("/api/createT", transaction.create);
 
 
 export default route;
