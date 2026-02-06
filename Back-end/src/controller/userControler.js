@@ -19,7 +19,7 @@ export class User{
             if(!userLogin)res.status(401).json({success:false, message:"usuário não encontrado"});
 
 
-            return res.status(200).json({success:true, token:userLogin[0], id:userLogin[1]});
+            return res.status(200).json({success:true, token:userLogin[0]});
 
         } catch (error) {
             console.log("Erro ao fazer o login: ", error);
@@ -47,10 +47,10 @@ export class User{
         try {
             
             const{newEmail,email} = req.body;
-            if(!email || !newEmail)messageFalse(res,"dados enviados incorretamente");
+            if(!email || !newEmail)return messageFalse(res,"dados enviados incorretamente");
 
             const userEmail = await modificEmail(email, newEmail);
-            if(!userEmail)messageFalse(res,"falha ao modificar email");
+            if(!userEmail)return messageFalse(res,"falha ao modificar email");
 
             return res.status(200).json({success:true, message:"email alterado com sucesso"});
 
@@ -64,10 +64,10 @@ export class User{
         try {
             
             const {email,password} = req.body;
-            if(!password || !email)messageFalse(res,"dados enviados incorretamente");
+            if(!password || !email)return messageFalse(res,"dados enviados incorretamente");
             
             const userPassword = await modificPassword(password,email);
-            if(!userPassword)messageFalse(res,"falha ao alterar senha");
+            if(!userPassword)return messageFalse(res,"falha ao alterar senha");
 
             return res.status(200).json({success:true, message:"senha alterada com sucesso"});            
 
@@ -78,11 +78,12 @@ export class User{
     }
     async nameUser(req,res){
         try {
-            const{id} = req.body;
-            if(!id)messageFalse(res,"dados enviados incorretamente");
+            /*const{id} = req.body;
+            if(!id)return messageFalse(res,"dados enviados incorretamente");*/
+            const idUser = req.user.id;
 
-            const name = await nameUser(id);
-            if(!name)messageFalse(req,"falha na busca do nome");
+            const name = await nameUser(idUser);
+            if(!name)return messageFalse(req,"falha na busca do nome");
 
             return res.status(200).json({success:true, name:name});
 

@@ -4,7 +4,7 @@ const TOKEN = "eyJhbGciOiJIUzM4NCJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIi
 
 export function createToken(user){
 
-    const token = jwt.sign({email: user.email, name:user.name}, TOKEN, {expiresIn:"1h"});
+    const token = jwt.sign({email: user.email, id:user.id}, TOKEN, {expiresIn:"1h"});
     
     if(!token)return false;
     console.log("Token criado com sucesso");
