@@ -10,8 +10,9 @@ export class User{
     
    async login(req,res){
         try {
+       
             if(!req.body)res.status(401).json({success:false, message:"Corpo da requisição não encontrado"});
-            
+        
             const{email,password} = req.body;
             if(!email || !password)res.status(401).json({success:false, message:"dados enviados incorretamente"});
             
@@ -28,7 +29,8 @@ export class User{
     }
 
     async create(req,res){
-        try {            
+        try {   
+            console.log("cheguei aqui");         
             const{name,email,password} = req.body;
             if(!name || !email || !password)res.status(401).json({success:false, message:"dados enviados incorretamente"});
             
@@ -80,6 +82,7 @@ export class User{
         try {
             /*const{id} = req.body;
             if(!id)return messageFalse(res,"dados enviados incorretamente");*/
+            console.log("cheguei na api");
             const idUser = req.user.id;
 
             const name = await nameUser(idUser);

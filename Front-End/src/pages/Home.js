@@ -1,14 +1,37 @@
 import{Text,View,StyleSheet, TouchableOpacity} from "react-native"
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Header from "../components/Header";
+import { useState, useEffect } from "react";
+import { readUser } from "../services/User";
+import { getItemAsync } from "expo-secure-store";
 
 export default function Home({navigation}){
+
+    const [name,setName] = useState("");
+
+    useEffect(()=>{
+        nameUser();//busca no banco antes de         
+    },[]);
+
+    async function nameUser(){
+        try {
+            const result = await readUser();
+            if(!result){
+                console.log("resultado: ", result);                
+            }else{
+                setName(result);
+            }
+            
+        } catch (error) {
+            console.error("erro ao utilizar o nome de usuário: ", error);            
+        }
+    } 
 
     
     return(
         <View style={styles.container}>
 
-            <Header name="Claudemir" on={()=> navigation.navigate("profile")}/>
+            <Header name={name} on={()=> navigation.navigate("profile")}/>
 
            <View style={styles.body}>{/*corpo*/}
              <Text style={{color:"#fff", textAlign:'center',fontSize:20}}>Mês de gastos:</Text>

@@ -8,9 +8,14 @@ const route = Router();
 const user = new User();
 const transaction = new  Transaction();
 
+//teste
+route.get("/api", (req,res)=>{
+    res.status(200).send("Conectado com sucesso");
+})
+
 //ROTAS USUÁRIO
 route.post("/api/login", user.login);
-route.post("/api/create", Auth, user.create);
+route.post("/api/create", user.create);
 route.put("/api/updateEmail", Auth, user.alterEmail);
 route.put("/api/updatePassword", Auth, user.alterPassword);
 route.get("/api/user", Auth, user.nameUser);

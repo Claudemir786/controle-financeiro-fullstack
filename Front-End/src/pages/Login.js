@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
 import CommonInput from "../components/CommonInputField.js";
 import { useState } from "react";
 import { UserLogin } from "../services/User.js";
@@ -14,13 +14,17 @@ export default function Login({navigation}){
         try{
             const result = await UserLogin(email,password);
             if(result){
-                navigation.navigate("tabs");
+                
+                 console.log("resultado: ", result);//para possivel debug        
+                 alert("login feito com sucesso"); 
+                 navigation.navigate("tabs");   
+            }else{
+                 alert("não foi possivel realizar o login, dados incorretos");    
             }
-            console.log("resultado: ", result);//para possivel debug
-            
+                   
 
-        }catch(err){
-            console.log("erro ao buscar dados de login: ", err);
+        }catch(error){
+            console.log("erro ao buscar dados de login: ", error);
             alert("não foi possivel realizar o login");
         }
        
@@ -42,6 +46,7 @@ export default function Login({navigation}){
              <CommonInput name="Email:" value={email}  setValue={setEmail} /> 
              <CommonInput name="Senha: " secureTextEntry={true} value={password} setValue={setPassword}/>  
          </View>
+        
           
          <View style={styles.buttonView}>{/*botões*/}
             <TouchableOpacity style={styles.button1} onPress={()=>handleLogin()}>

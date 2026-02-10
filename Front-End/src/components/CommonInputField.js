@@ -19,7 +19,7 @@ export default function CommonInput({name='default:',placeholder='', setValue, v
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
+        
         justifyContent:'center',
         alignItems:'center',
         width:"100%",        
@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
         marginTop:10,  
         marginBottom:15,   
         borderBlockColor:"#006d15",
-        color:"#fff"
+        color:"#fff",
+        
     },
     text:{
         fontSize:25,

@@ -17,7 +17,7 @@ export async function login(email, password){
 
         const token = createToken(user);
         if(!token)throw new Error("Falha ao criar o token");
-        const res = [token,user.id];
+        const res = [token];
         return res;           
         
 

@@ -1,7 +1,7 @@
 import {View,Text,StyleSheet,TextInput, ScrollView, TouchableOpacity} from "react-native"
 import Header from "../components/Header";
 import CommonInput from "../components/CommonInputField";
-import {Picker} from "react-native-web"
+import {Picker} from "@react-native-picker/picker"
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useState } from "react";
 import { CATEGORYEXPENSES } from "../components/CategoryArray";
@@ -96,7 +96,7 @@ export default function AddTransaction({navigation}){
                     />
 
                     {/*SOMENTE SE "TIPO" FOR SAÍDA */}
-                    {type === "Saída" && (
+                {type === "Saída" && (
                         <>
                              <Text style={styles.text}>Categoria:</Text>
                     <Picker 
@@ -118,12 +118,13 @@ export default function AddTransaction({navigation}){
 
                     {/*CAMPO DE SUBCATEGORIA */}
                     <Text style={styles.text}>SubCategoria:</Text>
-                        <Picker.Item label="Selecione"  />
+                        
                         <Picker
                          selectedValue={subCategory} 
                          onValueChange={(v)=> setSubCategory(v)}
                          style={styles.picker}
                         >
+                            <Picker.Item label="Selecione"  />
                             
                             {CATEGORYEXPENSES
                                 .filter(c => c.categoria === category)
@@ -187,7 +188,7 @@ export default function AddTransaction({navigation}){
                     </TouchableOpacity> 
                     {error &&(
                         <Text style={{fontSize: 25, color: 'red', textAlign:'center'}}>
-                    Não foi possível criar transação
+                            Não foi possível criar transação
                         </Text>
             
                     )}        

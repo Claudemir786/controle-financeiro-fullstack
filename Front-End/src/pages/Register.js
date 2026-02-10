@@ -17,10 +17,12 @@ export default function Register({navigation}){
             if(result){
                 alert("Usuário criado com sucesso");
                 navigation.navigate("login");
+            }else{
+                alert("Não foi possivel criar um novo usuário");
             }
             //console.log("resultado: ", result);
-        }catch(err){
-            console.error("Erro ao criar usuário novo: ", err);
+        }catch(erro){
+            console.error("Erro ao criar usuário novo: ", err0);
             alert("Não foi possivel criar um novo usuário");
         }       
             
