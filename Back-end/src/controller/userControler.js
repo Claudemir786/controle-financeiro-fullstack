@@ -82,7 +82,7 @@ export class User{
         try {
             /*const{id} = req.body;
             if(!id)return messageFalse(res,"dados enviados incorretamente");*/
-            console.log("cheguei na api");
+            //console.log("cheguei na api");
             const idUser = req.user.id;
 
             const name = await nameUser(idUser);

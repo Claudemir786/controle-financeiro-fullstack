@@ -1,9 +1,11 @@
 import { getToken, saveName, saveToken } from "./TokenService.js";
 
-const BASE_URL = "http://192.168.3.24:3000/api/";
+//utilizada também no arquivo de transações
+export const BASE_URL = "http://192.168.3.24:3000/api/";
 
-async function authHeader(){
-    const token = await getToken();
+//utilizado também para outras buscas (transações)
+export async function authHeader(){
+   const token = await getToken('auth')
     return {"Content-Type":"application/json",
     "Authorization": `Bearer ${token}`}
     
@@ -54,12 +56,13 @@ try {
 
 export async function readUser(){
     try {
+         
         const result = await fetch(`${BASE_URL}user`,{
             method: "GET",
             headers: await authHeader()
         });
-
-        if(!result.ok)throw new Error("usuário não encontrado");
+        //console.log("o que retornou do banco: ", result);
+        if(!result.ok)throw new Error("usuário não encontrado ");
         const res = await result.json();
 
         await saveName(res.name);//guarda o nome pra ser utilizado outras vezes

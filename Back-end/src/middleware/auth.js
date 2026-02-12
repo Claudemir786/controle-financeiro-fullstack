@@ -6,8 +6,10 @@ import { verifyToken } from "../utils/tokenJwt.js";
 
 export function Auth(req,res,next){
 
-    try {
+    try { 
+       
         const header = req.headers.authorization;
+         //console.log("header: ", header);
         if(!header)return messageFalse(res,"Header enviado incorretamente");
 
         const [type,token] = header.split(" ");

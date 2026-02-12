@@ -1,23 +1,48 @@
-import{Text,View,StyleSheet, TouchableOpacity} from "react-native"
+import{Text,View,StyleSheet, TouchableOpacity,FlatList} from "react-native"
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Header from "../components/Header";
 import { useState, useEffect } from "react";
 import { readUser } from "../services/User";
 import { getItemAsync } from "expo-secure-store";
+import { list } from "../services/Transations";
+
+//Pega o mês atual 
+const month = new Date().toLocaleDateString('pt-Br',{
+    month: 'long'
+}).replace(/^./, l => l.toUpperCase());
+
+//renderiza as categorias
+const SpendingCategory = ({category})=>{
+        return (
+            <>
+            
+            <View style={styles.subtitles}>
+                <Text style={styles.infoText}>{category?.category} </Text> 
+                <Text style={styles.infoText}>{category?.total},00 R$</Text>                       
+            </View>                   
+             
+            </>
+                      
+        )
+}
 
 export default function Home({navigation}){
 
     const [name,setName] = useState("");
+    const [trasactionsResume, setTransactionsResume] = useState(null);
+    const [categoryResume, setCategoryResume] = useState(null);
 
     useEffect(()=>{
-        nameUser();//busca no banco antes de         
+        nameUser();//busca no banco antes 
+        getTransactions();         
     },[]);
 
     async function nameUser(){
         try {
             const result = await readUser();
             if(!result){
-                console.log("resultado: ", result);                
+                throw new Error("Falha ao buscar nome");
+                //console.log("resultado: ", result);                
             }else{
                 setName(result);
             }
@@ -27,6 +52,25 @@ export default function Home({navigation}){
         }
     } 
 
+    async function getTransactions(){
+        try {
+            const result = await list();
+            if(!list){
+                //console.log("lista de trasações: ", list);
+                throw new Error("falha ao buscar todas as transações do usuário");
+            }else{
+                //console.log("O que Retornou: ", result);
+                setTransactionsResume(result.resume);
+                setCategoryResume(result.category);
+
+            }
+            
+        } catch (error) {
+            console.error("Erro ao buscar informações de transações: ", error);
+        }
+    }
+
+   
     
     return(
         <View style={styles.container}>
@@ -34,37 +78,31 @@ export default function Home({navigation}){
             <Header name={name} on={()=> navigation.navigate("profile")}/>
 
            <View style={styles.body}>{/*corpo*/}
-             <Text style={{color:"#fff", textAlign:'center',fontSize:20}}>Mês de gastos:</Text>
-
+             <Text style={{color:"#fff", textAlign:'center',fontSize:20}}>{month} :</Text>
+          
                 <View style={styles.month}>{/*Mês */}
-                    <View style={styles.subtitles}>
+                    <View style={styles.subtitles}>                       
                         <Text style={styles.infoText}>Saldo do Mês: </Text> 
-                        <Text style={styles.infoText}>Valor R$</Text>                       
+                        <Text style={styles.infoText}>{trasactionsResume?.saldo},00 R$</Text>                       
                     </View>                   
                     <View style={styles.subtitles}>
                         <Text style={styles.infoText}>Total de saídas</Text>
-                         <Text style={styles.infoText}>Valor R$</Text> 
+                         <Text style={[styles.infoText, {color:"red"} ]}>- {trasactionsResume?.totalSaidas},00 R$</Text> 
                     </View>
                     <View style={styles.subtitles}>
                         <Text style={styles.infoText}>Total de entradas:</Text>
-                         <Text style={styles.infoText}>Valor R$</Text> 
+                         <Text style={[styles.infoText, {color:"#006d15"} ]}>{trasactionsResume?.totalEntradas},00 R$</Text> 
                     </View>                 
                     
                 </View>
-                    <Text style={{color:"#fff", textAlign:'center',fontSize:20, marginTop:50}}>Gastos por categoria:</Text>
+                    <Text style={{color:"#fff", textAlign:'center',fontSize:20, marginTop:50}}>Gastos por categoria</Text>
                 <View style={styles.month}>{/*Gastos por categoria */}
-                    <View style={styles.subtitles}>
-                        <Text style={styles.infoText}>Categoria1 </Text> 
-                        <Text style={styles.infoText}>Valor R$</Text>                       
-                    </View>                   
-                    <View style={styles.subtitles}>
-                        <Text style={styles.infoText}>categoria2</Text>
-                         <Text style={styles.infoText}>Valor R$</Text> 
-                    </View>
-                    <View style={styles.subtitles}>
-                        <Text style={styles.infoText}>categoria3</Text>
-                         <Text style={styles.infoText}>Valor R$</Text> 
-                    </View>                 
+                    <FlatList 
+                        data={categoryResume}
+                        keyExtractor={(item)=> item.category}
+                        renderItem={({item})=> <SpendingCategory category={item} />}
+                    />
+                             
 
                 </View>
            </View>
@@ -76,6 +114,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor:"#006d15",
+        
     },
    
     body:{
@@ -90,7 +129,7 @@ const styles = StyleSheet.create({
     },
     
     infoText:{
-        color:"#fff", 
+        color:"#fff",
         fontSize:20,
         marginBottom:10,
         marginTop:10,

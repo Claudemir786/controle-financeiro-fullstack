@@ -20,11 +20,15 @@ const styles = StyleSheet.create({
      header:{        
         
         marginBottom:15,
+        marginTop:20,
+    
+
         
     },
     titleHeader:{
         color:"#fff",
         fontSize:18,
-        marginLeft:20
+        marginLeft:20,
+        
     },
 })

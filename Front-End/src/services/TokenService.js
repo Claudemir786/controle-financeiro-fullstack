@@ -6,12 +6,12 @@ export async function saveToken(token) {
 }
 
 export async function getToken(){
-    return await SecureStore.getItemAsync('authToken');
+    return await SecureStore.getItemAsync('auth');
 
 }
 
 export async function logout(){
-    await SecureStore.deleteItemAsync('authToken');
+    await SecureStore.deleteItemAsync('auth');
 }
 
 export async function saveName(name){
