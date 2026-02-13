@@ -3,10 +3,13 @@ import Header from "../components/Header";
 import CommonInput from "../components/CommonInputField";
 import {Picker} from "@react-native-picker/picker"
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CATEGORYEXPENSES } from "../components/CategoryArray";
 import { Checkbox } from "expo-checkbox";
 import { createTransaction } from "../services/Transations";
+import { getName } from "../services/TokenService";
+
+
 
 export default function AddTransaction({navigation}){
     const[type,setType] = useState("");
@@ -21,6 +24,19 @@ export default function AddTransaction({navigation}){
     const[value, setValue]= useState("");
     const[description,setDescription] = useState("");
     const[error, setError] = useState(false)
+    const[nameUser, setNameUser] = useState("");
+
+
+    useEffect(()=>{
+        readName()
+    },[])
+
+    //pega o nome de usuário que foi guardado no momento que foi feito login
+    async function readName() {
+        const name = await getName();
+        setNameUser(name);        
+    }
+    
 
     const whenSelecting = (event, dateSelect)=>{
         setShowDate(false)
@@ -43,19 +59,20 @@ export default function AddTransaction({navigation}){
 
         //Verificação de campos
         if(!type || !value || !date)alert("por favor preencha os dados corretamente");
-        if(type === "Entrada")setCategory("Entrada dinheiro");
+        
 
         try {
+
             const result = await createTransaction(type,valueFloat,category,subCategory,description,frequency,date,dateEnd)
             if(!result){               
                 setError(true)//usa esse valor para renderizar a mensagem de erro na tela 
             }else{
                 alert("Transação adicionada com sucesso");
-                navigation.navigate("tabs");
+                //navigation.navigate("tabs");
             }            
             
-        } catch (err) {
-             console.error("não foi possível criar nova transação: ", err);
+        } catch (error) {
+             console.error("não foi possível criar nova transação: ", error);
         }
         
         
@@ -63,7 +80,7 @@ export default function AddTransaction({navigation}){
     
     return(
         <View style={styles.container}>
-            <Header name="Olá usuário" on={()=> navigation.navigate("profile")}/>          
+            <Header name={nameUser} on={()=> navigation.navigate("profile")}/>          
 
             <View style={styles.body}>{/*corpo */}
                 <Text style={{color:"#fff", textAlign:'center',fontSize:25}}>adicionar nova transação</Text>

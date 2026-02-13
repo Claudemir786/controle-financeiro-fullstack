@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { readUser } from "../services/User";
 import { getItemAsync } from "expo-secure-store";
 import { list } from "../services/Transations";
+import{useFocusEffect} from '@react-navigation/native';
+import { useCallback } from "react";
 
 //Pega o mês atual 
 const month = new Date().toLocaleDateString('pt-Br',{
@@ -31,11 +33,14 @@ export default function Home({navigation}){
     const [name,setName] = useState("");
     const [trasactionsResume, setTransactionsResume] = useState(null);
     const [categoryResume, setCategoryResume] = useState(null);
+    
 
-    useEffect(()=>{
-        nameUser();//busca no banco antes 
-        getTransactions();         
-    },[]);
+    useFocusEffect(
+        useCallback(()=>{
+            nameUser();//busca no banco antes 
+            getTransactions();  
+        },[])
+    )
 
     async function nameUser(){
         try {

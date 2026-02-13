@@ -21,10 +21,11 @@ export class Transaction{
     async create(req,res){
 
         try {
-           
+          //console.log("cheguei na api");
+           //console.log("o que veio no corpo da requesição: ", req.body);
             const{type,value,category,subCategory,description,monthFrequency,startDate,endDate}=req.body;
-            if(!type || !value || !category || !subCategory || monthFrequency === undefined || !startDate )return messageFalse(res,"dados enviados incorretamente");
-            const typeEntryExit = type === "Saida" ? 1 :0;  
+            if(!type || !value || !category || monthFrequency === undefined || !startDate )return messageFalse(res,"dados enviados incorretamente");
+            const typeEntryExit = type === "Saída" ? 1 :0;  
             const userId = req.user.id;
             
             const result = await createTransaction(userId,typeEntryExit,value,category,subCategory,description,monthFrequency,startDate,endDate)

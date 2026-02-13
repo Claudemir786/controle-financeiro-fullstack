@@ -53,6 +53,8 @@ export async function transactionInformation(id){
 }
 
 export async function createTransaction(userId,type,value,category,subCategory,description,monthFrequency,startDate,endDate){
+   
+    //console.log("cheguei na DAO");
     try {
         
         const [result] = await pools.query(`INSERT INTO transaction(userId,type,value,category,description,monthFrequency,startDate,endDate,active,subCategory)VALUES
