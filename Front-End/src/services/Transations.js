@@ -51,3 +51,23 @@ export async function list(){
         return false;
     }
 }
+
+export async function listHistoric() {
+    try {
+
+        const result = await fetch(`${BASE_URL}read/transaction`,{
+            method:'GET',
+            headers: await authHeader()
+        });
+
+        if(!result.ok)throw new Error("Requisição falhou, não retornou os dados corretamente");
+        const res = await result.json();
+        return res.transaction;
+        
+
+        
+    } catch (error) {
+        console.error("Falha ao buscar dados no banco: ", error);
+        return false;
+    }
+}

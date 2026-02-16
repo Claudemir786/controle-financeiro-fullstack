@@ -73,6 +73,7 @@ export async function createTransaction(userId,type,value,category,subCategory,d
 
 export async function readTransaction(id){
     try {
+        //console.log("cheguei na dao.........");
 
         const [row] = await pools.query(`SELECT category, value, type
                                         FROM \`transaction\`

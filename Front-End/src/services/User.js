@@ -74,3 +74,25 @@ export async function readUser(){
     }
 }
 
+export async function alterEmail(newEmail, email) {
+    try {
+
+        const result = await fetch(`${BASE_URL}updateEmail`,{
+            method:"PUT",
+            headers: await authHeader(),
+            body:JSON.stringify({newEmail,email})
+        });
+
+        if(!result.ok)throw new Error("Falha na requisição, alteração de email não foi efetuada com sucesso");
+
+        return true;
+        
+    } catch (error) {
+        console.error("Erro ao alterar email: ", error);
+        return false;
+    }
+}
+
+export async function alterPassword(email,password) {
+    
+}

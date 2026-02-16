@@ -1,13 +1,25 @@
 import { Text, View,StyleSheet,TouchableOpacity } from "react-native";
 import Header from "../components/Header";
+import { useEffect, useState } from "react";
+import { getName } from "../services/TokenService";
 
 
 
 export default function Profile({navigation}){
+    const [name,setName]= useState("");
+
+    async function readName() {
+        const nameUser = await getName();
+        setName(nameUser);
+    }
+
+    useEffect(()=>{
+        readName();
+    },[])
     
     return(
         <View style={styles.container}>            
-            <Header name="Usuário "/>
+            <Header name={name}/>
             <View style={styles.body}>{/*Corpo */}
                 
                 <View >{/*primeiro botão */}
@@ -55,13 +67,13 @@ const styles = StyleSheet.create({
         backgroundColor:'#006d15',
         marginTop:10,
         borderRadius:20,
-        padding:20,
+        padding:10,
 
     },
     buttonSecundary:{
         backgroundColor:'#006d15',
         borderRadius:20,
-        padding:15,
+        padding:10,
         width:'50%',
         alignSelf:'center'
     },

@@ -46,10 +46,10 @@ export class Transaction{
            /* const{idUser} = req.body;
             if(!idUser)return messageFalse(res,"Dados enviado incorretamete");*/
             const idUser = req.user.id;
-
+            //console.log("cheguei na api");
             const transactionHistory = await readTransaction(idUser);
             if(!transactionHistory)return messageFalse(res,"não foi possivel ler as transações do usuário");
-
+            //console.log("resultado: ", transactionHistory);
             return res.status(200).json({success:true, transaction: transactionHistory});
             
         } catch (error) {

@@ -10,7 +10,7 @@ export default function Header({name="Olá Usuário", on}){
             <TouchableOpacity style={{marginLeft:20, marginTop:10}} onPress={on}>
                 <Ionicons name="person-circle-outline" size={80} color="#fff" />
             </TouchableOpacity>
-            <Text style={styles.titleHeader}>Olá {name}</Text>
+            <Text style={styles.titleHeader}>{name}</Text>
         </View>
     )
 }
