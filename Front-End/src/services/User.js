@@ -93,6 +93,19 @@ export async function alterEmail(newEmail, email) {
     }
 }
 
-export async function alterPassword(email,password) {
-    
+export async function alterPassword(password) {
+    try {
+        const result = await fetch(`${BASE_URL}updatePassword`,{
+            method:'PUT',
+            headers: await authHeader(),
+            body:JSON.stringify({password})
+        });
+
+        if(!result.ok)throw new Error("Flaha na requisição, alteração de senha não foi efetuada com sucesso");
+        return true;
+        
+    } catch (error) {
+        console.error("falha ao alterar senha: ", error);
+        return false;
+    }
 }

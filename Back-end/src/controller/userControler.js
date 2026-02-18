@@ -65,10 +65,10 @@ export class User{
     async alterPassword(req,res){
         try {
             
-            const {email,password} = req.body;
-            if(!password || !email)return messageFalse(res,"dados enviados incorretamente");
-            
-            const userPassword = await modificPassword(password,email);
+            const {password} = req.body;
+            if(!password)return messageFalse(res,"dados enviados incorretamente");
+            const idUser = req.user.id;
+            const userPassword = await modificPassword(password,idUser);
             if(!userPassword)return messageFalse(res,"falha ao alterar senha");
 
             return res.status(200).json({success:true, message:"senha alterada com sucesso"});            

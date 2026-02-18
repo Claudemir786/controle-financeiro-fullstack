@@ -33,11 +33,12 @@ export default function ChangeEmail({navigation}){
             if(!result){
 
                 alert("não foi possivel alterar email");
-                setmessage(true);
+                setmessage(true);//utilizado para mostrar a menssagem de erro
 
             }else{
 
                 alert("Email alterado com sucesso");
+                navigation.navigate("tabs")
             }
             
         } catch (error) {
@@ -52,8 +53,9 @@ export default function ChangeEmail({navigation}){
         <View style={styles.container}>            
             <Header name={name} on={()=>navigation.goBack()}/>
             <View style={styles.body}>{/*corpo */}
-                <CommonInput name="Email atual" value={email} setValue={setEmail()} />
-                <CommonInput name="Novo email" value={newEmail} setValue={setNewEmail()}/>
+                <CommonInput name="Email atual" value={email} setValue={setEmail} />
+                <CommonInput name="Novo email" value={newEmail} setValue={setNewEmail}/>
+                {/*mensagem de erro */}
                 {message === true &&(
                     <>
                         <Text style={{

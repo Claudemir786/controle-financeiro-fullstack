@@ -1,21 +1,28 @@
 import { Text, View,StyleSheet,TouchableOpacity } from "react-native";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
-import { getName } from "../services/TokenService";
+import { getName, logout } from "../services/TokenService";
 
 
 
 export default function Profile({navigation}){
     const [name,setName]= useState("");
 
+    useEffect(()=>{
+        readName();
+    },[])
+
     async function readName() {
         const nameUser = await getName();
         setName(nameUser);
     }
 
-    useEffect(()=>{
-        readName();
-    },[])
+    async function handleLogout() {
+        await logout();
+        navigation.replace("login")
+    }
+
+    
     
     return(
         <View style={styles.container}>            
@@ -35,7 +42,7 @@ export default function Profile({navigation}){
                 </View>
 
                 <View style={styles.viewButton}>{/*Tterceiro Botão(Sair) */}
-                    <TouchableOpacity style={styles.buttonSecundary}>
+                    <TouchableOpacity style={styles.buttonSecundary} onPress={()=>handleLogout()}>
                         <Text style={styles.textButton}>Sair</Text>
                     </TouchableOpacity>
                 </View>

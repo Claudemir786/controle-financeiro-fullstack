@@ -79,8 +79,10 @@ export default function Home({navigation}){
     
     return(
         <View style={styles.container}>
-
-            <Header name={name} on={()=> navigation.navigate("profile")}/>
+            <View style={{alignItems:'flex-start'}}>
+                <Header name={name} on={()=> navigation.navigate("profile")}/>
+            </View>
+           
 
            <View style={styles.body}>{/*corpo*/}
              <Text style={{color:"#fff", textAlign:'center',fontSize:20}}>{month} :</Text>

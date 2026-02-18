@@ -68,17 +68,18 @@ export async function modificEmail(email,newEmail){
 
 }
 
-export async function modificPassword(password,email){
-    try{
+export async function modificPassword(password,id){
+    try{      
+
         const newPassword = await hashPassword(password);        
-        const [result] = await pools.query(`UPDATE user SET password = ? WHERE email =?`, [newPassword,email]);
+        const [result] = await pools.query(`UPDATE user SET password = ? WHERE id =?`, [newPassword,id]);
         
         if(result.affectedRows <= 0)throw new Error("Update falhou no banco de dados");
 
         return true;
 
     }catch(error){
-        console.log("Falha ao modificar a senha no banco de dados: ", error.message);
+        console.log("Falha ao modificar a senha no banco de dados: ", error);
         return false;
     }
 
